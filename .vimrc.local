@@ -1,0 +1,6 @@
+" Set this project to use python3.4
+let g:pymode_python = 'python3'
+
+if filereadable(glob("~/.nvimrc")) 
+  source ~/.nvimrc
+endif
