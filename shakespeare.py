@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.4
 # -*- coding: utf-8 -*-
 
+from collections import OrderedDict
 import os
 
 import xmltodict
@@ -19,8 +20,6 @@ def load_xml():
 
 
 class Play(object):
-    """docstring for Play"""
-
     def __init__(self, xml):
         self.play = xml['PLAY']
         self.acts = [Act(act) for act in self.play['ACT']]
@@ -47,6 +46,19 @@ class Speech(object):
         self.speech = speech
         self.speaker = self.speech['SPEAKER']
         self.lines = [line for line in self.speech['LINE']]
+
+
+def list_characters(play):
+    characters = OrderedDict()
+    for act in play.acts:
+        for scene in act.scenes:
+            for speech in scene.speeches:
+                speaker = speech.speaker
+                character_lines = characters.get(speaker, [])
+                for line in speech.lines:
+                    character_lines.append(line)
+                characters[speaker] = character_lines
+    return characters
 
 
 if __name__ == '__main__':
